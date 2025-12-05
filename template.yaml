@@ -1,0 +1,255 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Recovery At Ease App - Serverless Backend
+
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
+  Function:
+    Timeout: 30
+    Runtime: nodejs18.x
+    Environment:
+      Variables:
+        USERS_TABLE: !Ref UsersTable
+        COUNTERS_TABLE: !Ref CountersTable
+        JOURNAL_TABLE: !Ref JournalTable
+        STEPWORK_TABLE: !Ref StepWorkTable
+        OPENAI_API_KEY: "{{resolve:ssm:/recovery-coaching/openai-api-key}}"
+
+Resources:
+  # DynamoDB Tables
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: RecoveryUsers
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+
+  CountersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: RecoveryCounters
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+
+  JournalTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: JournalEntries
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: entryId
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: entryId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: userId-createdAt-index
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  StepWorkTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: StepWork
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+
+  # Lambda Functions
+  SaveUserRecoveryPathFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: saveUserRecoveryPath/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /saveUserRecoveryPath
+            Method: post
+
+  GetUserDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: getUserData/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /getUserData
+            Method: post
+
+  GetRecoveryCountersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: getRecoveryCounters/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CountersTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /getRecoveryCounters
+            Method: post
+
+  SaveRecoveryCountersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: saveRecoveryCounters/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CountersTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /saveRecoveryCounters
+            Method: post
+
+  GetJournalEntriesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: getJournalEntries/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref JournalTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /getJournalEntries
+            Method: post
+
+  SaveJournalEntryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: saveJournalEntry/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref JournalTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /saveJournalEntry
+            Method: post
+
+  GetStepWorkFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: getStepWork/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref StepWorkTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /getStepWork
+            Method: post
+
+  SaveStepWorkFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: saveStepWork/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref StepWorkTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /saveStepWork
+            Method: post
+
+  GetUserStatsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: getUserStats/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CountersTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref JournalTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /getUserStats
+            Method: post
+
+  GetTodaysFocusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: getTodaysFocus/index.handler
+      CodeUri: aws/lambda
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref JournalTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /getTodaysFocus
+            Method: post
+
+Outputs:
+  ApiGatewayApi:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+  UsersTableName:
+    Description: DynamoDB Users Table Name
+    Value: !Ref UsersTable
+  CountersTableName:
+    Description: DynamoDB Counters Table Name
+    Value: !Ref CountersTable
+  JournalTableName:
+    Description: DynamoDB Journal Table Name
+    Value: !Ref JournalTable
+  StepWorkTableName:
+    Description: DynamoDB StepWork Table Name
+    Value: !Ref StepWorkTable
