@@ -17,7 +17,7 @@ exports.handler = async (event) => {
   }
 
   try {
-        // Parse body - handle both string and object
+    // Parse body - handle both string and object
     let body;
     if (typeof event.body === 'string') {
       try {
@@ -38,7 +38,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const entryId = `${userId}-${Date.now()}`;
+    const entryId = `${userId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const params = {
       TableName: TABLE_NAME,
       Item: {
@@ -62,9 +62,9 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         error: 'Internal server error',
-        message: error.message 
+        message: error.message
       }),
     };
   }

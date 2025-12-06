@@ -5,7 +5,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Onboarding from './components/Onboarding';
 import Dashboard from './pages/Dashboard';
-import RecoveryCounter from './pages/RecoveryCounter';
+import RecoveryTracking from './pages/RecoveryTracking';
 import JournalEntry from './pages/JournalEntry';
 import StepWork from './pages/StepWork';
 import AppHeader from './components/AppHeader';
@@ -25,7 +25,7 @@ const AppRoutes = () => {
       />
       <Route
         path="/login"
-        element={user ? <Navigate to="/dashboard" replace /> : <Login />}
+        element={<Login />}
       />
       <Route
         path="/onboarding"
@@ -47,7 +47,7 @@ const AppRoutes = () => {
         path="/recovery-counter"
         element={
           <ProtectedRoute>
-            <RecoveryCounter />
+            <RecoveryTracking />
           </ProtectedRoute>
         }
       />
@@ -77,7 +77,7 @@ function App() {
       <Router>
         <AppHeader />
         <AppRoutes />
-        <ToastContainer position="bottom-right" newestOnTop />
+        <ToastContainer position="top-center" newestOnTop />
       </Router>
     </AuthProvider>
   );

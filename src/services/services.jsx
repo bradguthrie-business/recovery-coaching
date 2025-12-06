@@ -38,7 +38,7 @@ export const saveUserRecoveryPath = (data) => post('/saveUserRecoveryPath', data
 export const getUserData = (data) => post('/getUserData', data);
 export const getUserStats = (data) => post('/getUserStats', data);
 
-// Counters
+// Recovery Tracking / Recovery Counters
 export const getRecoveryCounters = (data) => post('/getRecoveryCounters', data);
 export const saveRecoveryCounters = (data) => post('/saveRecoveryCounters', data);
 

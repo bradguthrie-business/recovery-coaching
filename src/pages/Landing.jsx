@@ -8,8 +8,8 @@ const Landing = () => {
   const features = [
     {
       icon: Calendar,
-      title: 'Recovery Counter',
-      description: 'Track your sobriety journey with multi-substance counters and celebrate every milestone.',
+      title: 'Recovery Tracking',
+      description: 'Track your recovery journey for substances, behaviors, or anything else you want to recover from, and celebrate every milestone.',
       color: 'bg-blue-100 text-blue-600'
     },
     {

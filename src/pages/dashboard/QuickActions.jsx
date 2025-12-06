@@ -7,7 +7,7 @@ const QuickActions = ({ onStartCounter, onJournal, onStepWork, disabled }) => (
                 className={`w-full btn-primary flex items-center justify-center ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={disabled}
             >
-                Start Recovery Counter
+                Start Recovery Tracking
             </button>
             <button
                 onClick={onJournal}

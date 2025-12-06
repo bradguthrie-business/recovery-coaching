@@ -183,21 +183,21 @@ const RecoveryCounter = () => {
         </button>
 
         <div className="card mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Recovery Counter</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Recovery Tracking</h1>
           <p className="text-gray-600">
             Track your sobriety journey. Start a counter for each substance you're working on.
           </p>
         </div>
 
         {loading ? (
-          <div className="max-h-[200px] display-flex flex items-center justify-center">
-            <Loading />
+          <div className="card mb-6">
+            <Loading size="h-10 w-10" isInContainer={true} />
           </div>) : (
           <div>
             {/* Active Counters Section */}
             {activeCounters.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Active Counters</h2>
+              <div className="card mb-8">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4"> Active Counters</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {activeCounters.map(([id, data]) => {
                     const days = calculateDays(data.startDate);
@@ -350,7 +350,7 @@ const RecoveryCounter = () => {
               <button
                 onClick={() => {
                   if (!customSubstance.trim()) return;
-                  const id = `custom-${Date.now()}`;
+                  const id = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
                   setCustomSubstances([...customSubstances, { id, name: customSubstance.trim(), color: 'bg-slate-500' }]);
                   setCustomSubstance('');
                   toast.success('Custom substance added');
