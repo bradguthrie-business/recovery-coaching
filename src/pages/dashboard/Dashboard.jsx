@@ -8,6 +8,7 @@ import { getUserData, getUserStats, getTodaysFocus } from '../../services/servic
 import QuickActions from './QuickActions';
 import TodaysFocus from './TodaysFocus';
 import StatCard from './StatCard';
+import StreakHeatmap from './StreakHeatmap';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -76,7 +77,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50">
       {loadingUserData ? <Loading /> : (<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
+        <div className="card mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome back, {user?.displayName || 'Friend'}!
           </h2>
@@ -85,7 +86,7 @@ const Dashboard = () => {
               Your recovery path: <span className="font-semibold text-recovery-DEFAULT">{RECOVERY_LABELS[userData?.recoveryPath] || userData?.recoveryPath || 'Not selected'}</span>
             </p>
             <button
-              onClick={() => navigate('/onboarding')}
+              onClick={() => navigate('/onboarding', { state: { recoveryPath: userData?.recoveryPath } })} // lets pass in current recovery path to the onboarding page
               className="inline-flex items-center gap-2 text-sm px-3 py-1 rounded-full bg-recovery-50 text-recovery-700 border border-recovery-100 hover:bg-recovery-100 transition"
             >
               <PenSquare className="w-4 h-4" />
@@ -115,6 +116,18 @@ const Dashboard = () => {
             loading={loadingTodaysFocus}
             onRetry={() => fetchUserTodaysFocus()}
           />
+        </div>
+
+        {/* Recovery Analytics */}
+        <div className="card mt-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Recovery Analytics</h2>
+          <p className="text-gray-600">Analytics for your recovery journey. These are currently randomized and using mock data.</p>
+          {/* Streak Heatmap, currently randomized and using mock data */}
+          <div className="mt-8">
+            <StreakHeatmap
+              loading={loadingUserStats}
+            />
+          </div>
         </div>
       </main>)}
     </div>

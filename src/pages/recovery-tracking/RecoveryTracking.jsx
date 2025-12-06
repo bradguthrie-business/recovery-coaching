@@ -312,6 +312,7 @@ const RecoveryCounter = () => {
             {availableSubstances.map((substance) => {
               const isActive = counters[substance.id]?.startDate;
               const Icon = SUBSTANCE_ICONS[substance.id] || SUBSTANCE_ICONS.default;
+              const isSelected = pendingStart?.id === substance.id;
 
               return (
                 <button
@@ -322,7 +323,9 @@ const RecoveryCounter = () => {
                     p-4 rounded-lg border-2 transition-all
                     ${isActive
                       ? 'border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed'
-                      : 'border-gray-200 hover:border-recovery-DEFAULT hover:shadow-md'
+                      : isSelected
+                        ? "border-recovery-DEFAULT bg-recovery-light shadow-md"
+                        : "border-gray-200 hover:border-recovery-DEFAULT hover:shadow-md"
                     }
                   `}
                 >

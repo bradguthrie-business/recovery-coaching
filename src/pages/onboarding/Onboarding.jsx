@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getCurrentUser } from '../../firebase/auth';
 import { RECOVERY_PATHS } from '../../constants/recovery';
 import { toast } from 'react-toastify';
 import { getUserData, saveUserRecoveryPath } from '../../services/services';
 
 const Onboarding = () => {
-  const [selectedPath, setSelectedPath] = useState(null);
+  const { state } = useLocation();
+  const [selectedPath, setSelectedPath] = useState(state?.recoveryPath);
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
   const navigate = useNavigate();
@@ -65,10 +66,10 @@ const Onboarding = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Welcome to Recovery At Ease
+            Recovery Path
           </h1>
           <p className="text-xl text-gray-600">
-            Choose your recovery path to personalize your journey
+            Choose your preferred type of recovery to get the best support for your journey.
           </p>
         </div>
 

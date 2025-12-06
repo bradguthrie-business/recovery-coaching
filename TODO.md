@@ -51,6 +51,7 @@ For example, within Today's Focus component - show a Loading spinner while we wa
 
 # IMPORTANT FEATURE
 - Create a Terms of Service that the user MUST agree to
+    - The user must view and agree to it when they create their account.
     - Specifically outlining that AI is involved in the application, and with other folks
 
 
@@ -60,3 +61,15 @@ For example, within Today's Focus component - show a Loading spinner while we wa
 - Changing/creating a new Firebase account based off the LLC
 - Changing/creating a new OpenAI account based off the LLC
     - Need to investigate more on the cost/credits used to generate LLM prompts
+
+# Add a “Streak Heatmap” Like GitHub on the Dashboard page.
+People LOVE visualizing progress.
+Add:
+365-day sobriety calendar
+colored squares for:
+green = no substance use
+yellow = mild cravings
+red = relapse
+This is retention gold.
+It motivates the hell out of people. Lets add this to the Dashboard. Make it its own component. 
+
