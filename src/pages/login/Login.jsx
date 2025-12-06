@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { signIn, signUp, signInWithGoogle } from '../firebase/auth';
+import { signIn, signUp, signInWithGoogle } from '../../firebase/auth';
 import { HeartPulse } from 'lucide-react';
-import { saveUserRecoveryPath } from '../services/services';
+import { saveUserRecoveryPath } from '../../services/services';
 
 const Login = () => {
   const location = useLocation();

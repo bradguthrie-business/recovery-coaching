@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../firebase/auth';
-import { RECOVERY_PATHS } from '../constants/recovery';
+import { getCurrentUser } from '../../firebase/auth';
+import { RECOVERY_PATHS } from '../../constants/recovery';
 import { toast } from 'react-toastify';
-import { getUserData, saveUserRecoveryPath } from '../services/services';
+import { getUserData, saveUserRecoveryPath } from '../../services/services';
 
 const Onboarding = () => {
   const [selectedPath, setSelectedPath] = useState(null);

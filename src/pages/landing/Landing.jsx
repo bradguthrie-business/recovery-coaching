@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Users, BookOpen, Calendar, Shield, TrendingUp, ArrowRight, HeartPulse } from 'lucide-react';
-import { RECOVERY_PATHS } from '../constants/recovery';
+import { RECOVERY_PATHS } from '../../constants/recovery';
 
 const Landing = () => {
   const navigate = useNavigate();

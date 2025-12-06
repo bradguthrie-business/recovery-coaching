@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../firebase/auth';
+import { getCurrentUser } from '../../firebase/auth';
 import {
   Calendar,
   ArrowLeft,
@@ -24,8 +24,8 @@ import {
 } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { toast } from 'react-toastify';
-import Loading from '../components/Loading';
-import { getRecoveryCounters, saveRecoveryCounters } from '../services/services';
+import Loading from '../../components/Loading';
+import { getRecoveryCounters, saveRecoveryCounters } from '../../services/services';
 
 const BASE_SUBSTANCES = [
   { id: 'alcohol', name: 'Alcohol', color: 'bg-blue-500' },

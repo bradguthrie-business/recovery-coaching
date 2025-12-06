@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Onboarding from './components/Onboarding';
-import Dashboard from './pages/Dashboard';
-import RecoveryTracking from './pages/RecoveryTracking';
-import JournalEntry from './pages/JournalEntry';
-import StepWork from './pages/StepWork';
+import Landing from './pages/landing/Landing';
+import Login from './pages/login/Login';
+import Onboarding from './pages/onboarding/Onboarding';
+import Dashboard from './pages/dashboard/Dashboard';
+import RecoveryTracking from './pages/recovery-tracking/RecoveryTracking';
+import JournalEntry from './pages/journal/JournalEntry';
+import StepWork from './pages/step-work/StepWork';
 import AppHeader from './components/AppHeader';
 import './styles/index.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -44,7 +44,7 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="/recovery-counter"
+        path="/recovery-tracking"
         element={
           <ProtectedRoute>
             <RecoveryTracking />

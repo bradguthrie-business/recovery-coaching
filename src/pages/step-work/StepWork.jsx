@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../firebase/auth';
+import { getCurrentUser } from '../../firebase/auth';
 import { BookOpen, ArrowLeft, Save, CheckCircle, Circle } from 'lucide-react';
-import { RECOVERY_LABELS, STEP_PROMPTS } from '../constants/recovery';
+import { RECOVERY_LABELS, STEP_PROMPTS } from '../../constants/recovery';
 import { toast } from 'react-toastify';
-import { getUserData, getStepWork, saveStepWork } from '../services/services';
+import { getUserData, getStepWork, saveStepWork } from '../../services/services';
 
 const StepWork = () => {
   const navigate = useNavigate();

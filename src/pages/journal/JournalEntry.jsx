@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../firebase/auth';
+import { getCurrentUser } from '../../firebase/auth';
 import { BookOpen, ArrowLeft, Save, Smile, Frown, Meh, ChevronDown, ChevronUp } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { toast } from 'react-toastify';
-import Loading from '../components/Loading';
-import { getJournalEntries, saveJournalEntry } from '../services/services';
+import Loading from '../../components/Loading';
+import { getJournalEntries, saveJournalEntry } from '../../services/services';
 
 const JournalEntry = () => {
   const navigate = useNavigate();

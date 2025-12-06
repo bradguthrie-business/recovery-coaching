@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../firebase/auth';
+import { getCurrentUser } from '../../firebase/auth';
 import { Calendar, BookOpen, Users, PenSquare } from 'lucide-react';
-import { RECOVERY_LABELS } from '../constants/recovery';
-import Loading from '../components/Loading';
-import { getUserData, getUserStats, getTodaysFocus } from '../services/services';
-import QuickActions from './dashboard/QuickActions';
-import TodaysFocus from './dashboard/TodaysFocus';
-import StatCard from './dashboard/StatCard';
+import { RECOVERY_LABELS } from '../../constants/recovery';
+import Loading from '../../components/Loading';
+import { getUserData, getUserStats, getTodaysFocus } from '../../services/services';
+import QuickActions from './QuickActions';
+import TodaysFocus from './TodaysFocus';
+import StatCard from './StatCard';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -19,52 +19,52 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const user = getCurrentUser();
 
+  // Fetch user data (recovery path)
+  const fetchUserData = async () => {
+    try {
+      const userDataFetched = await getUserData({ userId: user.uid });
+      setUserData(userDataFetched);
+    }
+    catch (error) {
+      console.error('Error fetching user data:', error);
+      setUserData({ recoveryPath: 'not-sure' });
+    } finally {
+      setLoadingUserData(false);
+    }
+  }
+
+  // Fetch user stats (days sober, journal entries, community posts)
+  const fetchUserStats = async () => {
+    try {
+      const userDataStatsFetched = await getUserStats({ userId: user.uid });
+      setStats(userDataStatsFetched);
+    }
+    catch (error) {
+      console.error('Error fetching user stats:', error);
+      setStats({ daysSober: 0, journalEntries: 0, communityPosts: 0 });
+    } finally {
+      setLoadingUserStats(false);
+    }
+  }
+
+  // Fetch user todays focus, based on their recovery path and recent journal entries
+  const fetchUserTodaysFocus = async () => {
+    try {
+      const userDataFocusFetched = await getTodaysFocus({ userId: user.uid });
+      setTodayFocus(userDataFocusFetched);
+    }
+    catch (error) {
+      console.error('Error fetching user todays focus:', error);
+      setTodayFocus(null);
+    } finally {
+      setLoadingTodaysFocus(false);
+    }
+  }
+
   useEffect(() => {
     // TODO: Make use of state for the userData for their recovery path, we need to make use of React Context
     // Use React Context to store the userData for their recovery path, and use it throughout the application, that way we reduce API calls
     // Also ideally make use of Context for the API calls that involve AI
-
-    // Fetch user data (recovery path)
-    const fetchUserData = async () => {
-      try {
-        const userDataFetched = await getUserData({ userId: user.uid });
-        setUserData(userDataFetched);
-      }
-      catch (error) {
-        console.error('Error fetching user data:', error);
-        setUserData({ recoveryPath: 'not-sure' });
-      } finally {
-        setLoadingUserData(false);
-      }
-    }
-
-    // Fetch user stats (days sober, journal entries, community posts)
-    const fetchUserStats = async () => {
-      try {
-        const userDataStatsFetched = await getUserStats({ userId: user.uid });
-        setStats(userDataStatsFetched);
-      }
-      catch (error) {
-        console.error('Error fetching user stats:', error);
-        setStats({ daysSober: 0, journalEntries: 0, communityPosts: 0 });
-      } finally {
-        setLoadingUserStats(false);
-      }
-    }
-
-    // Fetch user todays focus, based on their recovery path and recent journal entries
-    const fetchUserTodaysFocus = async () => {
-      try {
-        const userDataFocusFetched = await getTodaysFocus({ userId: user.uid });
-        setTodayFocus(userDataFocusFetched);
-      }
-      catch (error) {
-        console.error('Error fetching user todays focus:', error);
-        setTodayFocus(null);
-      } finally {
-        setLoadingTodaysFocus(false);
-      }
-    }
 
     fetchUserData();
     fetchUserStats();
@@ -104,7 +104,7 @@ const Dashboard = () => {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <QuickActions
-            onStartCounter={() => navigate('/recovery-counter')}
+            onStartCounter={() => navigate('/recovery-tracking')}
             onJournal={() => navigate('/journal')}
             onStepWork={() => navigate('/step-work')}
             disabled={loadingUserData}
