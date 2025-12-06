@@ -1,6 +1,6 @@
 import Loading from '../../components/Loading';
 
-export const StatCard = ({ label, value, icon, loading }) => (
+const StatCard = ({ label, value, icon, loading }) => (
     <div className="card">
         <div className="flex items-center justify-between">
             <div>
@@ -16,3 +16,4 @@ export const StatCard = ({ label, value, icon, loading }) => (
     </div>
 );
 
+export default StatCard;

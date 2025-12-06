@@ -5,7 +5,9 @@ import { Calendar, BookOpen, Users, PenSquare } from 'lucide-react';
 import { RECOVERY_LABELS } from '../constants/recovery';
 import Loading from '../components/Loading';
 import { getUserData, getUserStats, getTodaysFocus } from '../services/services';
-import { StatCard } from './dashboard/StatCard';
+import QuickActions from './dashboard/QuickActions';
+import TodaysFocus from './dashboard/TodaysFocus';
+import StatCard from './dashboard/StatCard';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -103,64 +105,18 @@ const Dashboard = () => {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="card">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h3>
-            <div className="space-y-3">
-              <button
-                onClick={() => navigate('/recovery-counter')}
-                className="w-full btn-primary flex items-center justify-center"
-              >
-                Start Recovery Counter
-              </button>
-              <button
-                onClick={() => navigate('/journal')}
-                className="w-full btn-secondary flex items-center justify-center"
-              >
-                Write Journal Entry
-              </button>
-              <button
-                onClick={() => navigate('/step-work')}
-                className="w-full btn-secondary flex items-center justify-center"
-              >
-                Begin Step Work
-              </button>
-            </div>
-          </div>
+          <QuickActions
+            onStartCounter={() => navigate('/recovery-counter')}
+            onJournal={() => navigate('/journal')}
+            onStepWork={() => navigate('/step-work')}
+            disabled={loadingUserData}
+          />
 
-          <div className="card">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Today's Focus</h3>
-            {loadingTodaysFocus ? (
-              <div className="mt-12">
-                <Loading size="h-10 w-10" isInContainer={true} />
-              </div>
-            ) : (
-              <>
-                {todayFocus ? (
-                  <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 border-l-4 border-recovery-DEFAULT">
-                      <p className="text-gray-800 font-medium mb-2">{todayFocus.title}</p>
-                      <p className="text-sm text-gray-700">{todayFocus.content}</p>
-                    </div>
-                    {todayFocus.suggestions && todayFocus.suggestions.length > 0 && (
-                      <div>
-                        <p className="text-sm font-medium text-gray-700 mb-2">Suggestions:</p>
-                        <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
-                          {todayFocus.suggestions.map((suggestion, idx) => (
-                            <li key={idx}>{suggestion}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-600">
-                      Unfortunately, we were not able to fetch your today's focus. Insights will appear here catered toward your recovery path and recent journal entries.
-                    </p>
-                  </div>
-                )}</>
-            )}
-          </div>
+          <TodaysFocus
+            focus={todayFocus}
+            loading={loadingTodaysFocus}
+            onRetry={() => fetchUserTodaysFocus()}
+          />
         </div>
       </main>)}
     </div>
