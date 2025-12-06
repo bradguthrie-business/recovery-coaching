@@ -7,6 +7,10 @@ import { toast } from 'react-toastify';
 import { getUserData, getStepWork, saveStepWork } from '../../services/services';
 import Loading from '../../components/Loading';
 
+// TODO: Fix the button alignment issue for "Mark Complete" button - it should be aligned to the right most side and always be same size, it differs based on the amount of text in the description of hte step.
+// TODO: When the user resets their step work method to a different recovery path, the step work should be reset to the new recovery path, so we should clear out the step work for the user.
+// TODO: When the user loads the page, we want to select the first step that is not completed, or, if the user completed all steps, select the last step. Otherwise, select the first step.
+
 const StepWork = () => {
   const navigate = useNavigate();
   const user = getCurrentUser();
@@ -22,7 +26,6 @@ const StepWork = () => {
         setLoading(false);
         return;
       }
-
       try {
         const data = await getUserData({ userId: user.uid });
         setUserData(data);
@@ -90,9 +93,13 @@ const StepWork = () => {
 
   return (
     <>
-      {loading ? (<Loading />) : (
+      {loading ? (
+        <Loading />
+      ) : (
         <div className="min-h-screen bg-gray-50 py-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            {/* Back Button */}
             <button
               onClick={() => navigate('/dashboard')}
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
@@ -102,6 +109,7 @@ const StepWork = () => {
             </button>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
               {/* Steps List */}
               <div className="lg:col-span-1">
                 <div className="card">
@@ -127,25 +135,24 @@ const StepWork = () => {
                           key={step.step}
                           onClick={() => handleStepSelect(step)}
                           className={`
-                        w-full text-left p-4 rounded-lg border-2 transition-all
-                        ${isSelected
-                              ? 'border-recovery-DEFAULT bg-blue-50'
-                              : 'border-gray-200 hover:border-gray-300'
-                            }
-                        ${isCompleted ? 'bg-green-50' : ''}
-                      `}
+                            w-full text-left p-4 rounded-lg border-2 transition-all
+                            ${isSelected ? 'border-recovery-DEFAULT bg-blue-50' : 'border-gray-200 hover:border-gray-300'}
+                            ${isCompleted ? 'bg-green-50' : ''}
+                          `}
                         >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3">
+                            {/* Fixed Icon Wrapper */}
+                            <div className="w-5 h-5 flex items-center justify-center">
                               {isCompleted ? (
-                                <CheckCircle className="w-5 h-5 text-green-600" />
+                                <CheckCircle className="w-4 h-4 text-green-600" />
                               ) : (
-                                <Circle className="w-5 h-5 text-gray-400" />
+                                <Circle className="w-4 h-4 text-gray-400" />
                               )}
-                              <div>
-                                <p className="font-semibold text-gray-900">{step.title}</p>
-                                <p className="text-xs text-gray-600 line-clamp-2">{step.prompt}</p>
-                              </div>
+                            </div>
+
+                            <div>
+                              <p className="font-semibold text-gray-900">{step.title}</p>
+                              <p className="text-xs text-gray-600 line-clamp-2">{step.prompt}</p>
                             </div>
                           </div>
                         </button>
@@ -160,31 +167,37 @@ const StepWork = () => {
                 {selectedStep ? (
                   <div className="card">
                     <div className="flex items-center justify-between mb-6">
+
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900">{selectedStep.title}</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          {selectedStep.title}
+                        </h2>
                         <p className="text-gray-600 mt-1">{selectedStep.prompt}</p>
                       </div>
+
+                      {/* Mark Complete Button */}
                       <button
                         onClick={() => toggleComplete(selectedStep.step)}
                         className={`
-                      flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
-                      ${stepWork[selectedStep.step]?.completed
+                          flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
+                          ${stepWork[selectedStep.step]?.completed
                             ? 'bg-green-100 text-green-700 hover:bg-green-200'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                           }
-                    `}
+                        `}
                       >
-                        {stepWork[selectedStep.step]?.completed ? (
-                          <>
-                            <CheckCircle className="w-5 h-5" />
-                            Completed
-                          </>
-                        ) : (
-                          <>
-                            <Circle className="w-5 h-5" />
-                            Mark Complete
-                          </>
-                        )}
+                        {/* Fixed Icon Wrapper */}
+                        <div className="w-5 h-5 flex items-center justify-center">
+                          {stepWork[selectedStep.step]?.completed ? (
+                            <CheckCircle className="w-4 h-4" />
+                          ) : (
+                            <Circle className="w-4 h-4" />
+                          )}
+                        </div>
+
+                        {stepWork[selectedStep.step]?.completed
+                          ? 'Completed'
+                          : 'Mark Complete'}
                       </button>
                     </div>
 
@@ -229,6 +242,7 @@ const StepWork = () => {
                   </div>
                 )}
               </div>
+
             </div>
           </div>
         </div>
@@ -238,4 +252,3 @@ const StepWork = () => {
 };
 
 export default StepWork;
-
