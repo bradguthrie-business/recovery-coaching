@@ -52,10 +52,6 @@ A modern, full-stack web application designed to support individuals on their re
    VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
    VITE_FIREBASE_APP_ID=your_app_id
    VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-   
-   VITE_AWS_ACCESS_KEY_ID=your_aws_access_key
-   VITE_AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-   VITE_AWS_REGION=us-east-1
    VITE_API_GATEWAY_URL=your_api_gateway_url
    ```
 
@@ -82,12 +78,6 @@ A modern, full-stack web application designed to support individuals on their re
    ```bash
    sam deploy --guided
    ```
-   
-   This will:
-   - Create a DynamoDB table (`RecoveryUsers`)
-   - Deploy Lambda functions
-   - Create API Gateway endpoints
-   - Output the API Gateway URL
 
 4. **Update your `.env` file**
    
@@ -98,89 +88,27 @@ A modern, full-stack web application designed to support individuals on their re
 
 ### Lambda Functions
 
-- **saveUserRecoveryPath**: Saves user's selected recovery path to DynamoDB
-- **getUserData**: Retrieves user data from DynamoDB
+- **getJournalEntries**: Retrieves user's journal entries.
+- **getRecoveryCounters**: Retrieves user's data for amount of time they are recovering from substances or vices.
+- **getStepWork**: Retrieves the step work for the user.
+- **getTodaysFocus**: Retrieves the focus of the day for the user, based off their recovery style and recent journals. This uses OpenAI.
+- **getUserData**: Retrieves user's data, which includes recovery path, display name, email, and more.
+- **getUserStats**: Retrieves user's stats for number of days sober, amount of journal entries, and number of community posts.
+- **saveJournalEntry**: Saves user's journal entry.
+- **saveRecoveryCounters**: Saves user's amount of time they are recovering from substances or vices.
+- **saveStepWork**: Saves user's step work depending on their selected recovery path.
+- **saveUserRecoveryPath**: Saves user's selected recovery path.
 
-### DynamoDB Schema
+### DynamoDB Tables
 
-**Table: RecoveryUsers**
-
-- `userId` (String, Partition Key) - Firebase User ID
-- `email` (String) - User email
-- `recoveryPath` (String) - Selected recovery path
-- `createdAt` (String) - ISO timestamp
-- `updatedAt` (String) - ISO timestamp
-
-## Project Structure
-
-```
-recovery-coaching/
-├── src/
-│   ├── components/          # React components
-│   │   ├── Onboarding.jsx   # Recovery path selection
-│   │   └── ProtectedRoute.jsx
-│   ├── context/             # React context
-│   │   └── AuthContext.jsx  # Authentication context
-│   ├── firebase/            # Firebase configuration
-│   │   ├── config.js
-│   │   └── auth.js
-│   ├── aws/                 # AWS configuration
-│   │   └── config.js
-│   ├── pages/               # Page components
-│   │   ├── Login.jsx
-│   │   └── Dashboard.jsx
-│   ├── styles/              # Global styles
-│   │   └── index.css
-│   ├── App.jsx              # Main app component
-│   └── main.jsx             # Entry point
-├── aws/
-│   └── lambda/              # Lambda functions
-│       ├── saveUserRecoveryPath/
-│       └── getUserData/
-├── template.yaml            # SAM template
-├── package.json
-├── vite.config.js
-└── tailwind.config.js
-```
-
-## Recovery Paths
-
-Users can select from the following recovery approaches:
-
-- AA (Alcoholics Anonymous)
-- NA (Narcotics Anonymous)
-- Celebrate Recovery
-- SMART Recovery
-- Cali Sober
-- Psychedelic-Assisted
-- Harm Reduction
-- MAT (Suboxone/Methadone/Naltrexone)
-- Abstinence-only
-- Not sure yet
-
-## Development
-
-### Build for Production
-
-```bash
-npm run build
-```
-
-### Preview Production Build
-
-```bash
-npm run preview
-```
-
-## Future Features
-
-- Sobriety counter (multi-substance)
-- Daily journaling
-- Step work system
-- Community feed
-- Harm reduction resources
-- Coaching marketplace
-- Analytics and insights
+- **RecoveryUsers**
+   - Stores the information of the user.
+- **RecoveryCounters**
+   - Stores the days of sobriety/abstinence from specific substances of the user.
+- **JournalEntries**
+   - Stores the journal entries of the user.
+- **StepWork**
+   - Stores the step work of the user based on their recovery path.
 
 ## License
 
