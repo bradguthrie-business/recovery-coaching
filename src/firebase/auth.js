@@ -5,13 +5,17 @@ import {
   GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "./config";
 
 export const signUp = async (email, password, displayName) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     if (displayName) {
       await updateProfile(userCredential.user, { displayName });
     }
@@ -23,7 +27,11 @@ export const signUp = async (email, password, displayName) => {
 
 export const signIn = async (email, password) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     return { user: userCredential.user, error: null };
   } catch (error) {
     return { user: null, error: error.message };
@@ -47,22 +55,22 @@ export const signInWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
-    
+
     // Check if user is new by comparing creation time with last sign in time
     // If they're the same, it's a new user
     const metadata = userCredential.user.metadata;
     const isNewUser = metadata.creationTime === metadata.lastSignInTime;
-    
-    return { 
-      user: userCredential.user, 
-      error: null, 
-      isNewUser: isNewUser 
+
+    return {
+      user: userCredential.user,
+      error: null,
+      isNewUser: isNewUser,
     };
   } catch (error) {
-    return { 
-      user: null, 
-      error: error.message, 
-      isNewUser: false 
+    return {
+      user: null,
+      error: error.message,
+      isNewUser: false,
     };
   }
 };
@@ -70,4 +78,3 @@ export const signInWithGoogle = async () => {
 export const onAuthChange = (callback) => {
   return onAuthStateChanged(auth, callback);
 };
-

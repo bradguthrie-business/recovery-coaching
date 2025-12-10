@@ -1,13 +1,11 @@
-const { GetCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb');
-const { dynamoDocClient } = require('../dynamodb');
-const { getCorsHeaders, isOptionsRequest } = require('../_corsHelper');
+const { GetCommand, QueryCommand } = require("@aws-sdk/lib-dynamodb");
+const { dynamoDocClient } = require("../dynamodb");
+const { getCorsHeaders, isOptionsRequest } = require("../_corsHelper");
 
-const COUNTERS_TABLE = process.env.COUNTERS_TABLE || 'RecoveryCounters';
-const JOURNAL_TABLE = process.env.JOURNAL_TABLE || 'JournalEntries';
+const COUNTERS_TABLE = process.env.COUNTERS_TABLE || "RecoveryCounters";
+const JOURNAL_TABLE = process.env.JOURNAL_TABLE || "JournalEntries";
 
 exports.handler = async (event) => {
-  console.log('Event received:', JSON.stringify(event, null, 2));
-  
   const headers = getCorsHeaders();
 
   if (isOptionsRequest(event)) {
@@ -21,7 +19,7 @@ exports.handler = async (event) => {
   try {
     // Parse body - handle both string and object
     let body;
-    if (typeof event.body === 'string') {
+    if (typeof event.body === "string") {
       try {
         body = JSON.parse(event.body);
       } catch (e) {
@@ -30,14 +28,14 @@ exports.handler = async (event) => {
     } else {
       body = event.body || {};
     }
-    
+
     const { userId } = body;
 
     if (!userId) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Missing userId' }),
+        body: JSON.stringify({ error: "Missing userId" }),
       };
     }
 
@@ -46,12 +44,14 @@ exports.handler = async (event) => {
       TableName: COUNTERS_TABLE,
       Key: { userId },
     };
-    const countersResult = await dynamoDocClient.send(new GetCommand(countersParams));
+    const countersResult = await dynamoDocClient.send(
+      new GetCommand(countersParams)
+    );
     const counters = countersResult.Item?.counters || {};
 
     // Calculate longest streak
     let longestStreak = 0;
-    Object.values(counters).forEach(counter => {
+    Object.values(counters).forEach((counter) => {
       if (counter.startDate) {
         const start = new Date(counter.startDate);
         const now = new Date();
@@ -63,14 +63,16 @@ exports.handler = async (event) => {
     // Get journal entry count
     const journalParams = {
       TableName: JOURNAL_TABLE,
-      IndexName: 'userId-createdAt-index',
-      KeyConditionExpression: 'userId = :userId',
+      IndexName: "userId-createdAt-index",
+      KeyConditionExpression: "userId = :userId",
       ExpressionAttributeValues: {
-        ':userId': userId,
+        ":userId": userId,
       },
-      Select: 'COUNT',
+      Select: "COUNT",
     };
-    const journalResult = await dynamoDocClient.send(new QueryCommand(journalParams));
+    const journalResult = await dynamoDocClient.send(
+      new QueryCommand(journalParams)
+    );
 
     return {
       statusCode: 200,
@@ -82,14 +84,14 @@ exports.handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error('Error fetching user stats:', error);
-    console.error('Error stack:', error.stack);
+    console.error("Error fetching user stats:", error);
+    console.error("Error stack:", error.stack);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
-        error: 'Internal server error',
-        message: error.message 
+      body: JSON.stringify({
+        error: "Internal server error",
+        message: error.message,
       }),
     };
   }

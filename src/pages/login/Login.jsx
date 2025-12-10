@@ -1,28 +1,28 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { signIn, signUp, signInWithGoogle } from '../../firebase/auth';
-import { HeartPulse } from 'lucide-react';
-import { saveUserRecoveryPath } from '../../services/services';
+import { useEffect, useState } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { signIn, signUp, signInWithGoogle } from "../../firebase/auth";
+import { HeartPulse } from "lucide-react";
+import { saveUserRecoveryPath } from "../../services/services";
 
 const Login = () => {
   const location = useLocation();
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (location.state?.startMode === 'signup') {
+    if (location.state?.startMode === "signup") {
       setIsLogin(false);
     }
   }, [location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
@@ -47,23 +47,23 @@ const Login = () => {
               createdAt: new Date().toISOString(),
             });
           } catch (error) {
-            console.error('Error saving user info:', error);
+            console.error("Error saving user info:", error);
             // Continue even if Lambda call fails
           }
-          navigate('/onboarding');
+          navigate("/onboarding");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
@@ -84,16 +84,16 @@ const Login = () => {
               createdAt: new Date().toISOString(),
             });
           } catch (error) {
-            console.error('Error saving user info:', error);
+            console.error("Error saving user info:", error);
             // Continue even if Lambda call fails
           }
-          navigate('/onboarding');
+          navigate("/onboarding");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError("An unexpected error occurred");
       setLoading(false);
     }
   };
@@ -109,7 +109,9 @@ const Login = () => {
             Recovery At Ease
           </h1>
           <p className="text-gray-600">
-            {isLogin ? 'Welcome back to your ultimate recovery toolbox.' : 'Start your recovery journey and never look back.'}
+            {isLogin
+              ? "Welcome back to your ultimate recovery toolbox."
+              : "Start your recovery journey and never look back."}
           </p>
         </div>
 
@@ -117,7 +119,10 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {!isLogin && (
               <div>
-                <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="displayName"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Name
                 </label>
                 <input
@@ -132,7 +137,10 @@ const Login = () => {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email
               </label>
               <input
@@ -147,7 +155,10 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Password
               </label>
               <input
@@ -173,7 +184,7 @@ const Login = () => {
               disabled={loading}
               className="btn-primary w-full"
             >
-              {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Sign Up'}
+              {loading ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
             </button>
           </form>
 
@@ -183,7 +194,9 @@ const Login = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                <span className="px-2 bg-white text-gray-500">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -211,7 +224,11 @@ const Login = () => {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              {loading ? 'Please wait...' : (isLogin ? 'Sign in with Google' : 'Sign up with Google')}
+              {loading
+                ? "Please wait..."
+                : isLogin
+                  ? "Sign in with Google"
+                  : "Sign up with Google"}
             </button>
           </div>
 
@@ -220,11 +237,13 @@ const Login = () => {
               type="button"
               onClick={() => {
                 setIsLogin(!isLogin);
-                setError('');
+                setError("");
               }}
               className="text-recovery-DEFAULT hover:text-recovery-dark font-medium"
             >
-              {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+              {isLogin
+                ? "Don't have an account? Sign up"
+                : "Already have an account? Sign in"}
             </button>
           </div>
         </div>
@@ -234,4 +253,3 @@ const Login = () => {
 };
 
 export default Login;
-

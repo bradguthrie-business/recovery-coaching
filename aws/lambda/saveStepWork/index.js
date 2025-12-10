@@ -1,11 +1,10 @@
-const { GetCommand, PutCommand } = require('@aws-sdk/lib-dynamodb');
-const { dynamoDocClient } = require('../dynamodb');
-const { getCorsHeaders, isOptionsRequest } = require('../_corsHelper');
+const { GetCommand, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const { dynamoDocClient } = require("../dynamodb");
+const { getCorsHeaders, isOptionsRequest } = require("../_corsHelper");
 
-const TABLE_NAME = process.env.STEPWORK_TABLE || 'StepWork';
+const TABLE_NAME = process.env.STEPWORK_TABLE || "StepWork";
 
 exports.handler = async (event) => {
-  console.log('Event received:', JSON.stringify(event, null, 2));
   const headers = getCorsHeaders();
 
   if (isOptionsRequest(event)) {
@@ -17,9 +16,9 @@ exports.handler = async (event) => {
   }
 
   try {
-        // Parse body - handle both string and object
+    // Parse body - handle both string and object
     let body;
-    if (typeof event.body === 'string') {
+    if (typeof event.body === "string") {
       try {
         body = JSON.parse(event.body);
       } catch (e) {
@@ -34,7 +33,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Missing required fields' }),
+        body: JSON.stringify({ error: "Missing required fields" }),
       };
     }
 
@@ -66,17 +65,17 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ message: 'Step work saved successfully' }),
+      body: JSON.stringify({ message: "Step work saved successfully" }),
     };
   } catch (error) {
-    console.error('Error:', error);
-    console.error('Error stack:', error.stack);
+    console.error("Error:", error);
+    console.error("Error stack:", error.stack);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
-        error: 'Internal server error',
-        message: error.message 
+      body: JSON.stringify({
+        error: "Internal server error",
+        message: error.message,
       }),
     };
   }

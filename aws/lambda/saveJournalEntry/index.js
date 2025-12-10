@@ -1,11 +1,10 @@
-const { PutCommand } = require('@aws-sdk/lib-dynamodb');
-const { dynamoDocClient } = require('../dynamodb');
-const { getCorsHeaders, isOptionsRequest } = require('../_corsHelper');
+const { PutCommand } = require("@aws-sdk/lib-dynamodb");
+const { dynamoDocClient } = require("../dynamodb");
+const { getCorsHeaders, isOptionsRequest } = require("../_corsHelper");
 
-const TABLE_NAME = process.env.JOURNAL_TABLE || 'JournalEntries';
+const TABLE_NAME = process.env.JOURNAL_TABLE || "JournalEntries";
 
 exports.handler = async (event) => {
-  console.log('Event received:', JSON.stringify(event, null, 2));
   const headers = getCorsHeaders();
 
   if (isOptionsRequest(event)) {
@@ -19,7 +18,7 @@ exports.handler = async (event) => {
   try {
     // Parse body - handle both string and object
     let body;
-    if (typeof event.body === 'string') {
+    if (typeof event.body === "string") {
       try {
         body = JSON.parse(event.body);
       } catch (e) {
@@ -34,11 +33,13 @@ exports.handler = async (event) => {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Missing required fields' }),
+        body: JSON.stringify({ error: "Missing required fields" }),
       };
     }
 
-    const entryId = `${userId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const entryId = `${userId}-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
     const params = {
       TableName: TABLE_NAME,
       Item: {
@@ -54,17 +55,20 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ message: 'Journal entry saved successfully', entryId }),
+      body: JSON.stringify({
+        message: "Journal entry saved successfully",
+        entryId,
+      }),
     };
   } catch (error) {
-    console.error('Error:', error);
-    console.error('Error stack:', error.stack);
+    console.error("Error:", error);
+    console.error("Error stack:", error.stack);
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Internal server error',
-        message: error.message
+        error: "Internal server error",
+        message: error.message,
       }),
     };
   }

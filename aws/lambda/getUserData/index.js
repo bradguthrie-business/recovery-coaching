@@ -1,23 +1,21 @@
-const { GetCommand } = require('@aws-sdk/lib-dynamodb');
-const { dynamoDocClient } = require('../dynamodb');
-const { getCorsHeaders, isOptionsRequest } = require('../_corsHelper');
+const { GetCommand } = require("@aws-sdk/lib-dynamodb");
+const { dynamoDocClient } = require("../dynamodb");
+const { getCorsHeaders, isOptionsRequest } = require("../_corsHelper");
 
-const TABLE_NAME = process.env.USERS_TABLE || 'RecoveryUsers';
+const TABLE_NAME = process.env.USERS_TABLE || "RecoveryUsers";
 
 exports.handler = async (event) => {
   const headers = getCorsHeaders();
 
   // Safety check for event
   if (!event) {
-    console.error('Event is null or undefined');
+    console.error("Event is null or undefined");
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Invalid event' }),
+      body: JSON.stringify({ error: "Invalid event" }),
     };
   }
-
-  console.log('Event received:', JSON.stringify(event, null, 2));
 
   // Handle OPTIONS request
   if (isOptionsRequest(event)) {
@@ -31,7 +29,7 @@ exports.handler = async (event) => {
   try {
     // Parse body - handle both string and object
     let body;
-    if (typeof event.body === 'string') {
+    if (typeof event.body === "string") {
       try {
         body = JSON.parse(event.body);
       } catch (e) {
@@ -47,7 +45,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Missing userId' }),
+        body: JSON.stringify({ error: "Missing userId" }),
       };
     }
 
@@ -64,7 +62,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 404,
         headers,
-        body: JSON.stringify({ error: 'User not found' }),
+        body: JSON.stringify({ error: "User not found" }),
       };
     }
 
@@ -74,16 +72,15 @@ exports.handler = async (event) => {
       body: JSON.stringify(result.Item),
     };
   } catch (error) {
-    console.error('Error fetching user data:', error);
-    console.error('Error stack:', error.stack);
+    console.error("Error fetching user data:", error);
+    console.error("Error stack:", error.stack);
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Internal server error',
-        message: error.message
+        error: "Internal server error",
+        message: error.message,
       }),
     };
   }
 };
-

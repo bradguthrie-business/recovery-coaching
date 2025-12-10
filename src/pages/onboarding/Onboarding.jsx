@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { getCurrentUser } from '../../firebase/auth';
-import { RECOVERY_PATHS } from '../../constants/recovery';
-import { toast } from 'react-toastify';
-import { getUserData, saveUserRecoveryPath } from '../../services/services';
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getCurrentUser } from "../../firebase/auth";
+import { RECOVERY_PATHS } from "../../constants/recovery";
+import { toast } from "react-toastify";
+import { getUserData, saveUserRecoveryPath } from "../../services/services";
 
 const Onboarding = () => {
   const { state } = useLocation();
@@ -25,7 +25,7 @@ const Onboarding = () => {
           setSelectedPath(existing.recoveryPath);
         }
       } catch (error) {
-        console.warn('Unable to load existing recovery path', error);
+        console.warn("Unable to load existing recovery path", error);
       } finally {
         setInitializing(false);
       }
@@ -50,12 +50,12 @@ const Onboarding = () => {
         createdAt: new Date().toISOString(),
       });
 
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
-      toast.error('We could not save your path right now, please try again.');
-      console.error('Error saving recovery path:', error);
+      toast.error("We could not save your path right now, please try again.");
+      console.error("Error saving recovery path:", error);
       // Still navigate to dashboard even if Lambda call fails
-      navigate('/dashboard');
+      navigate("/dashboard");
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,8 @@ const Onboarding = () => {
             Recovery Path
           </h1>
           <p className="text-xl text-gray-600">
-            Choose your preferred type of recovery to get the best support for your journey.
+            Choose your preferred type of recovery to get the best support for
+            your journey.
           </p>
         </div>
 
@@ -86,9 +87,10 @@ const Onboarding = () => {
                   onClick={() => setSelectedPath(path.id)}
                   className={`
                     card p-6 text-left transition-all duration-200 cursor-pointer
-                    ${isSelected
-                      ? 'ring-2 ring-recovery-DEFAULT shadow-lg transform scale-105'
-                      : 'hover:shadow-lg hover:scale-[1.02]'
+                    ${
+                      isSelected
+                        ? "ring-2 ring-recovery-DEFAULT shadow-lg transform scale-105"
+                        : "hover:shadow-lg hover:scale-[1.02]"
                     }
                   `}
                 >
@@ -103,8 +105,16 @@ const Onboarding = () => {
                     </div>
                     {isSelected && (
                       <div className="text-recovery-DEFAULT">
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        <svg
+                          className="w-6 h-6"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       </div>
                     )}
@@ -120,10 +130,10 @@ const Onboarding = () => {
               disabled={!selectedPath || loading || initializing}
               className={`
                 btn-primary text-lg px-8 py-3
-                ${(!selectedPath || loading || initializing) ? 'opacity-50 cursor-not-allowed' : ''}
+                ${!selectedPath || loading || initializing ? "opacity-50 cursor-not-allowed" : ""}
               `}
             >
-              {loading ? 'Setting up your journey...' : 'Continue'}
+              {loading ? "Setting up your journey..." : "Continue"}
             </button>
           </div>
         </form>
@@ -133,4 +143,3 @@ const Onboarding = () => {
 };
 
 export default Onboarding;
-

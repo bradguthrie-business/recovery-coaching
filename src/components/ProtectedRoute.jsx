@@ -1,14 +1,12 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Loading from './Loading';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import Loading from "./Loading";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <Loading />
-    );
+    return <Loading />;
   }
 
   if (!user) {
@@ -19,4 +17,3 @@ const ProtectedRoute = ({ children }) => {
 };
 
 export default ProtectedRoute;
-

@@ -31,19 +31,22 @@ A modern, full-stack web application designed to support individuals on their re
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <your-repo-url>
    cd recovery-coaching
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
-   
+
    Create a `.env` file in the root directory (or use the provided one):
+
    ```env
    VITE_FIREBASE_API_KEY=your_firebase_api_key
    VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
@@ -56,6 +59,7 @@ A modern, full-stack web application designed to support individuals on their re
    ```
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    ```
@@ -67,21 +71,25 @@ A modern, full-stack web application designed to support individuals on their re
 ### Deploy Lambda Functions
 
 1. **Install AWS SAM CLI**
+
    - Follow instructions at: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html
 
 2. **Build the SAM application**
+
    ```bash
    sam build
    ```
 
 3. **Deploy to AWS**
+
    ```bash
    sam deploy --guided
    ```
 
 4. **Update your `.env` file**
-   
+
    After deployment, copy the API Gateway URL from the output and add it to your `.env`:
+
    ```env
    VITE_API_GATEWAY_URL=https://your-api-id.execute-api.us-east-1.amazonaws.com/Prod
    ```
@@ -102,13 +110,13 @@ A modern, full-stack web application designed to support individuals on their re
 ### DynamoDB Tables
 
 - **RecoveryUsers**
-   - Stores the information of the user.
+  - Stores the information of the user.
 - **RecoveryCounters**
-   - Stores the days of sobriety/abstinence from specific substances of the user.
+  - Stores the days of sobriety/abstinence from specific substances of the user.
 - **JournalEntries**
-   - Stores the journal entries of the user.
+  - Stores the journal entries of the user.
 - **StepWork**
-   - Stores the step work of the user based on their recovery path.
+  - Stores the step work of the user based on their recovery path.
 
 ## License
 
@@ -117,4 +125,3 @@ MIT License - See LICENSE file for details
 ## Support
 
 For issues and questions, please open an issue on GitHub.
-

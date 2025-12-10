@@ -1,19 +1,28 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import Landing from './pages/landing/Landing';
-import Login from './pages/login/Login';
-import Onboarding from './pages/onboarding/Onboarding';
-import Dashboard from './pages/dashboard/Dashboard';
-import RecoveryTracking from './pages/recovery-tracking/RecoveryTracking';
-import JournalEntry from './pages/journal/JournalEntry';
-import StepWork from './pages/step-work/StepWork';
-import AppHeader from './components/AppHeader';
-import './styles/index.css';
-import 'react-datepicker/dist/react-datepicker.css';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Landing from "./pages/landing/Landing";
+import Login from "./pages/login/Login";
+import Onboarding from "./pages/onboarding/Onboarding";
+import Dashboard from "./pages/dashboard/Dashboard";
+import RecoveryTracking from "./pages/recovery-tracking/RecoveryTracking";
+import JournalEntry from "./pages/journal/JournalEntry";
+import StepWork from "./pages/step-work/StepWork";
+import AppHeader from "./components/AppHeader";
+import "./styles/index.css";
+import "react-datepicker/dist/react-datepicker.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+// TODO: Re-use the step work and place it in src/constants/
+// TODO: Remove fallback in src/lambda/getTodaysFocus
+// TODO Update/add Extensions
+// TODO: Implement local funciotnality with Docker / (Kubernetes?) to run the app locally and clone the table for ourselves(?) (Container Tools extension?)
 const AppRoutes = () => {
   const { user } = useAuth();
 
@@ -23,10 +32,7 @@ const AppRoutes = () => {
         path="/"
         element={user ? <Navigate to="/dashboard" replace /> : <Landing />}
       />
-      <Route
-        path="/login"
-        element={<Login />}
-      />
+      <Route path="/login" element={<Login />} />
       <Route
         path="/onboarding"
         element={
@@ -84,4 +90,3 @@ function App() {
 }
 
 export default App;
-

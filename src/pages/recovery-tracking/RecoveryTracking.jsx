@@ -1,6 +1,6 @@
-import { useMemo, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../../firebase/auth';
+import { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../../firebase/auth";
 import {
   Calendar,
   ArrowLeft,
@@ -21,27 +21,30 @@ import {
   Briefcase,
   Zap,
   Candy,
-} from 'lucide-react';
-import DatePicker from 'react-datepicker';
-import { toast } from 'react-toastify';
-import Loading from '../../components/Loading';
-import { getRecoveryCounters, saveRecoveryCounters } from '../../services/services';
+} from "lucide-react";
+import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
+import Loading from "../../components/Loading";
+import {
+  getRecoveryCounters,
+  saveRecoveryCounters,
+} from "../../services/services";
 
 const BASE_SUBSTANCES = [
-  { id: 'alcohol', name: 'Alcohol', color: 'bg-blue-500' },
-  { id: 'nicotine', name: 'Nicotine', color: 'bg-gray-500' },
-  { id: 'weed', name: 'Cannabis', color: 'bg-green-500' },
-  { id: 'opioids', name: 'Opioids', color: 'bg-red-500' },
-  { id: 'cocaine', name: 'Cocaine', color: 'bg-amber-500' },
-  { id: 'stimulants', name: 'Stimulants', color: 'bg-orange-500' },
-  { id: 'benzos', name: 'Benzos', color: 'bg-purple-500' },
-  { id: 'kratom', name: 'Kratom', color: 'bg-emerald-500' },
-  { id: 'gambling', name: 'Gambling', color: 'bg-indigo-500' },
-  { id: 'pornography', name: 'Pornography', color: 'bg-pink-500' },
-  { id: 'gaming', name: 'Gaming', color: 'bg-blue-400' },
-  { id: 'work', name: 'Workaholism', color: 'bg-teal-500' },
-  { id: 'sugar', name: 'Sugar', color: 'bg-yellow-400' },
-  { id: 'caffeine', name: 'Caffeine', color: 'bg-lime-500' },
+  { id: "alcohol", name: "Alcohol", color: "bg-blue-500" },
+  { id: "nicotine", name: "Nicotine", color: "bg-gray-500" },
+  { id: "weed", name: "Cannabis", color: "bg-green-500" },
+  { id: "opioids", name: "Opioids", color: "bg-red-500" },
+  { id: "cocaine", name: "Cocaine", color: "bg-amber-500" },
+  { id: "stimulants", name: "Stimulants", color: "bg-orange-500" },
+  { id: "benzos", name: "Benzos", color: "bg-purple-500" },
+  { id: "kratom", name: "Kratom", color: "bg-emerald-500" },
+  { id: "gambling", name: "Gambling", color: "bg-indigo-500" },
+  { id: "pornography", name: "Pornography", color: "bg-pink-500" },
+  { id: "gaming", name: "Gaming", color: "bg-blue-400" },
+  { id: "work", name: "Workaholism", color: "bg-teal-500" },
+  { id: "sugar", name: "Sugar", color: "bg-yellow-400" },
+  { id: "caffeine", name: "Caffeine", color: "bg-lime-500" },
 ];
 
 const SUBSTANCE_ICONS = {
@@ -68,7 +71,7 @@ const RecoveryCounter = () => {
   const [loading, setLoading] = useState(true);
   const [counters, setCounters] = useState({});
   const [saving, setSaving] = useState(false);
-  const [customSubstance, setCustomSubstance] = useState('');
+  const [customSubstance, setCustomSubstance] = useState("");
   const [customSubstances, setCustomSubstances] = useState([]);
   const [pendingStart, setPendingStart] = useState(null);
   const [pendingDate, setPendingDate] = useState(new Date());
@@ -86,7 +89,7 @@ const RecoveryCounter = () => {
           setCounters(data.counters);
         }
       } catch (error) {
-        console.error('Error fetching counters:', error);
+        console.error("Error fetching counters:", error);
       } finally {
         setLoading(false);
       }
@@ -107,7 +110,11 @@ const RecoveryCounter = () => {
   const allSubstances = useMemo(() => {
     return [
       ...BASE_SUBSTANCES,
-      ...customSubstances.map((c) => ({ id: c.id, name: c.name, color: c.color || 'bg-slate-500' })),
+      ...customSubstances.map((c) => ({
+        id: c.id,
+        name: c.name,
+        color: c.color || "bg-slate-500",
+      })),
     ];
   }, [customSubstances]);
 
@@ -128,7 +135,7 @@ const RecoveryCounter = () => {
       },
     });
     setPendingStart(null);
-    toast.success('Counter started');
+    toast.success("Counter started");
   };
 
   const handleResetCounter = (substanceId) => {
@@ -139,14 +146,14 @@ const RecoveryCounter = () => {
         startDate: new Date().toISOString(),
       },
     });
-    toast.info('Counter reset to today');
+    toast.info("Counter reset to today");
   };
 
   const handleRemoveCounter = (substanceId) => {
     const newCounters = { ...counters };
     delete newCounters[substanceId];
     setCounters(newCounters);
-    toast.success('Counter removed');
+    toast.success("Counter removed");
   };
 
   const handleSave = async () => {
@@ -156,26 +163,28 @@ const RecoveryCounter = () => {
     try {
       await saveRecoveryCounters({
         userId: user.uid,
-        counters: counters
+        counters: counters,
       });
       // setCountersProfile(counters);
-      toast.success('Counters saved successfully');
+      toast.success("Counters saved successfully");
       // refreshCounters();
     } catch (error) {
-      console.error('Error saving counters:', error);
-      toast.error('Error saving counters. Please try again.');
+      console.error("Error saving counters:", error);
+      toast.error("Error saving counters. Please try again.");
     } finally {
       setSaving(false);
     }
   };
 
-  const activeCounters = Object.entries(counters).filter(([id, data]) => data.startDate);
+  const activeCounters = Object.entries(counters).filter(
+    ([id, data]) => data.startDate,
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <button
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate("/dashboard")}
           className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -183,31 +192,42 @@ const RecoveryCounter = () => {
         </button>
 
         <div className="card mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Recovery Tracking</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Recovery Tracking
+          </h1>
           <p className="text-gray-600">
-            Track your sobriety journey. Start a counter for each substance you're working on.
+            Track your sobriety journey. Start a counter for each substance
+            you're working on.
           </p>
         </div>
 
         {loading ? (
           <div className="card mb-6">
             <Loading size="h-10 w-10" isInContainer={true} />
-          </div>) : (
+          </div>
+        ) : (
           <div>
             {/* Active Counters Section */}
             {activeCounters.length > 0 && (
               <div className="card mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4"> Active Counters</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                  {" "}
+                  Active Counters
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {activeCounters.map(([id, data]) => {
                     const days = calculateDays(data.startDate);
-                    const substance = allSubstances.find(s => s.id === id) || { color: 'bg-indigo-500' };
+                    const substance = allSubstances.find(
+                      (s) => s.id === id,
+                    ) || { color: "bg-indigo-500" };
                     const Icon = SUBSTANCE_ICONS[id] || SUBSTANCE_ICONS.default;
 
                     return (
                       <div key={id} className="card">
                         <div className="flex items-center justify-between mb-4">
-                          <div className={`${substance.color} p-3 rounded-lg text-white`}>
+                          <div
+                            className={`${substance.color} p-3 rounded-lg text-white`}
+                          >
                             <Icon className="w-6 h-6" />
                           </div>
                           <div className="flex items-center gap-2">
@@ -234,12 +254,18 @@ const RecoveryCounter = () => {
                           {days}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {days === 1 ? 'day' : 'days'} sober
+                          {days === 1 ? "day" : "days"} sober
                         </p>
                         <div className="mt-3">
-                          <label className="block text-xs font-semibold text-gray-600 mb-1">Start Date</label>
+                          <label className="block text-xs font-semibold text-gray-600 mb-1">
+                            Start Date
+                          </label>
                           <DatePicker
-                            selected={data.startDate ? new Date(data.startDate) : new Date()}
+                            selected={
+                              data.startDate
+                                ? new Date(data.startDate)
+                                : new Date()
+                            }
                             onChange={(date) => {
                               if (!date) return;
                               setCounters({
@@ -252,7 +278,7 @@ const RecoveryCounter = () => {
                             }}
                             className="input-field text-sm"
                             dateFormat="MM/dd/yyyy"
-                            minDate={new Date('1950-01-01')}
+                            minDate={new Date("1950-01-01")}
                             maxDate={new Date()}
                           />
                         </div>
@@ -262,11 +288,16 @@ const RecoveryCounter = () => {
                 </div>
               </div>
             )}
-            {!pendingStart && activeCounters.length === 0 &&
+            {!pendingStart && activeCounters.length === 0 && (
               <div className="card mb-6">
-                <p className="text-gray-500 text-md">No active counters. Start a new counter to track abstinence from a vice!</p>
-              </div>}
-          </div>)}
+                <p className="text-gray-500 text-md">
+                  No active counters. Start a new counter to track abstinence
+                  from a vice!
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Start New Counter */}
         {pendingStart && (
@@ -274,11 +305,15 @@ const RecoveryCounter = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <p className="text-sm text-gray-600">Starting counter for</p>
-                <p className="text-lg font-semibold text-gray-900">{pendingStart.name}</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {pendingStart.name}
+                </p>
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Start date</label>
+                  <label className="text-sm font-medium text-gray-700 block mb-1">
+                    Start date
+                  </label>
                   <DatePicker
                     selected={pendingDate}
                     onChange={(date) => setPendingDate(date || new Date())}
@@ -287,10 +322,7 @@ const RecoveryCounter = () => {
                   />
                 </div>
                 <div className="flex gap-4 justify-between ml-4 mt-5">
-                  <button
-                    onClick={confirmStartCounter}
-                    className="btn-primary"
-                  >
+                  <button onClick={confirmStartCounter} className="btn-primary">
                     Start Counter
                   </button>
                   <button
@@ -307,33 +339,45 @@ const RecoveryCounter = () => {
 
         {/* Start New Counter */}
         <div className="card">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Start a New Counter</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            Start a New Counter
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             {availableSubstances.map((substance) => {
               const isActive = counters[substance.id]?.startDate;
-              const Icon = SUBSTANCE_ICONS[substance.id] || SUBSTANCE_ICONS.default;
+              const Icon =
+                SUBSTANCE_ICONS[substance.id] || SUBSTANCE_ICONS.default;
               const isSelected = pendingStart?.id === substance.id;
 
               return (
                 <button
                   key={substance.id}
-                  onClick={() => isActive ? null : queueStartCounter(substance)}
+                  onClick={() =>
+                    isActive ? null : queueStartCounter(substance)
+                  }
                   disabled={isActive}
                   className={`
                     p-4 rounded-lg border-2 transition-all
-                    ${isActive
-                      ? 'border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed'
-                      : isSelected
-                        ? "border-recovery-DEFAULT bg-recovery-light shadow-md"
-                        : "border-gray-200 hover:border-recovery-DEFAULT hover:shadow-md"
+                    ${
+                      isActive
+                        ? "border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed"
+                        : isSelected
+                          ? "border-recovery-DEFAULT bg-recovery-light shadow-md"
+                          : "border-gray-200 hover:border-recovery-DEFAULT hover:shadow-md"
                     }
                   `}
                 >
-                  <div className={`${substance.color} w-12 h-12 rounded-lg mx-auto mb-2 flex items-center justify-center text-white`}>
+                  <div
+                    className={`${substance.color} w-12 h-12 rounded-lg mx-auto mb-2 flex items-center justify-center text-white`}
+                  >
                     <Icon className="w-6 h-6" />
                   </div>
-                  <p className="text-sm font-medium text-gray-700">{substance.name}</p>
-                  {isActive && <p className="text-xs text-gray-500 mt-1">Active</p>}
+                  <p className="text-sm font-medium text-gray-700">
+                    {substance.name}
+                  </p>
+                  {isActive && (
+                    <p className="text-xs text-gray-500 mt-1">Active</p>
+                  )}
                 </button>
               );
             })}
@@ -341,7 +385,9 @@ const RecoveryCounter = () => {
 
           {/* Custom Substance */}
           <div className="mt-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Want to track abstinence from a vice that's not listed?</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Want to track abstinence from a vice that's not listed?
+            </h2>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -354,9 +400,12 @@ const RecoveryCounter = () => {
                 onClick={() => {
                   if (!customSubstance.trim()) return;
                   const id = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-                  setCustomSubstances([...customSubstances, { id, name: customSubstance.trim(), color: 'bg-slate-500' }]);
-                  setCustomSubstance('');
-                  toast.success('Custom substance added');
+                  setCustomSubstances([
+                    ...customSubstances,
+                    { id, name: customSubstance.trim(), color: "bg-slate-500" },
+                  ]);
+                  setCustomSubstance("");
+                  toast.success("Custom substance added");
                 }}
                 disabled={!customSubstance.trim()}
                 className="btn-primary inline-flex items-center gap-2"
@@ -373,7 +422,7 @@ const RecoveryCounter = () => {
             className="mt-6 w-full btn-primary flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
-            {saving ? 'Saving...' : 'Save Counters'}
+            {saving ? "Saving..." : "Save Counters"}
           </button>
         </div>
       </div>
@@ -382,4 +431,3 @@ const RecoveryCounter = () => {
 };
 
 export default RecoveryCounter;
-
